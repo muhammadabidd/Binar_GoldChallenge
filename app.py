@@ -56,6 +56,14 @@ def text():
     response_data = jsonify(json_response)
     return response_data
 
+
+
+##Text Processing melalui Input text
+#Connect to Database
+
+
+
+
 @swag_from("docs/hello_world.yml", methods = ['POST'])
 @app.route('/text_clean', methods=['POST'])
 def text_clean():
