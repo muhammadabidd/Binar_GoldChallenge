@@ -44,7 +44,7 @@ def hello_world():
     response_data = jsonify(json_response)
     return response_data
 
-@swag_from("docs/hello_world.yml", methods = ['GET'])
+@swag_from("/docs/hello_world.yml", methods = ['GET'])
 @app.route('/text', methods=['GET'])
 def text():
     json_response = {
@@ -55,14 +55,6 @@ def text():
 
     response_data = jsonify(json_response)
     return response_data
-
-
-
-##Text Processing melalui Input text
-#Connect to Database
-
-
-
 
 @swag_from("docs/hello_world.yml", methods = ['POST'])
 @app.route('/text_clean', methods=['POST'])
