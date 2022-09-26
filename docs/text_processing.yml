@@ -1,9 +1,9 @@
 tags:
-  - name : Text Processing
+  - name: Text Processing
 get:
   description: Text yang akan diproses
 parameters:
-  - name : text
+  - name: text
     in: formData
     required: true
     type: string
