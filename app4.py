@@ -1,5 +1,5 @@
 import re
-
+import sqlite3
 from flask import Flask, jsonify
 
 app = Flask(__name__)
@@ -31,6 +31,17 @@ swagger_config = {
     "specs_route": "/docs/"
 }
 swagger = Swagger(app, template=swagger_template, config = swagger_config)
+
+
+
+#Connecting to database
+conn = sqlite3.connect('data/text_processing.db', check_same_thread=False)
+
+#Defining and Executing the Query for table data if it not available
+conn.execute('''CREATE TABLE IF NOT EXIST data (text varchar(255), text_clean varchar(255));''')
+
+
+
 
 @swag_from("docs/hello_world.yml", methods = ['GET'])
 @app.route('/', methods=['GET'])
