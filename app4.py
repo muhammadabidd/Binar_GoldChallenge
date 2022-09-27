@@ -35,10 +35,10 @@ swagger = Swagger(app, template=swagger_template, config = swagger_config)
 
 
 #Connecting to database
-conn = sqlite3.connect('data/text_processing.db', check_same_thread=False)
+conn = sqlite3.connect('text_processing.db', check_same_thread=False)
 
 #Defining and Executing the Query for table data if it not available
-conn.execute('''CREATE TABLE IF NOT EXIST data (text varchar(255), text_clean varchar(255));''')
+conn.execute('''CREATE TABLE IF NOT EXISTS data (text varchar(255), text_clean varchar(255));''')
 
 
 
