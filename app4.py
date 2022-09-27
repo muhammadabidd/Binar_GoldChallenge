@@ -83,13 +83,15 @@ def text_clean():
 @swag_from("docs/text_processing.yml", methods = ['POST'])
 @app.route('/text_processing', methods=['POST'])
 def text_processing():
-
     text = request.form.get('text')
+    text_clean = re.sub(r'[^a-zA-Z0-9]','',text)
+
+    conn.execute("INSERT INTO data(text, text_clean) VALUES ('"+ text +"','"+ text_clean +"')")
 
     json_response = {
         'status_code' : 200,
         'description' : "Teks yang sudah diproses",
-        'data' : re.sub(r'[^a-zA-Z0-9]', ' ', text),
+        'data' : text_clean,
     }
 
     response_data = jsonify(json_response)
