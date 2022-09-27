@@ -1,7 +1,7 @@
 tags:
   - name: Text Processing
 get:
-  description: Text yang akan diproses
+  description: Teks yang akan diproses
 parameters:
   - name: text
     in: formData
