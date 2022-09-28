@@ -105,11 +105,25 @@ def text_processing():
 def tweet_csv():
    if request.method == 'POST':
         file = request.files['file']
-                
-        try:
-            data = pd.read_csv(file, encoding='iso-8859-1')
-        except:
-            data = pd.read_csv(file, encoding='utf-8') 
+             
+        data = pd.read_csv(file)
+
+        file_clean = re.sub(r'[^a-zA-Z0-9]','',data)
+
+        conn.execute("INSERT INTO data(text, text_clean) VALUES ('"+ data +"','"+ file_clean +"')")
+        conn.commit()
+        conn.close()
+
+        json_response = {
+            'status_code' : 200,
+            'description' : "Teks yang sudah diproses",
+            'data' : text_clean,
+        }
+
+        response_data = jsonify(json_response)
+        return response_data
+    
+    
 
      
 
