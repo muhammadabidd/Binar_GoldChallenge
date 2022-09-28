@@ -3,10 +3,6 @@ import sqlite3
 import pandas as pd
 from flask import Flask, jsonify
 
-from werkzeug.utils import secure_filename
-from werkzeug.datastructures import  FileStorage
-import os
-
 app = Flask(__name__)
 
 from flask import request
@@ -106,48 +102,32 @@ def text_processing():
 # Upload CSV File
 @swag_from("docs/file_Upload.yml", methods = ['POST'])
 @app.route("/upload_csv", methods=["POST"])
-def upload_csv():
+def tweet_csv():
    if request.method == 'POST':
         file = request.files['file']
-<<<<<<< HEAD
-<<<<<<< HEAD
-        filename = secure_filename(file.filename)
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(file_path)
-
-        data = pd.read_csv(file_path)
+             
+        data = pd.read_csv(file)
         first_column = data.iloc[:, 0]
 
+        for teks in first_column:
+            file_clean = re.sub(r'[^a-zA-Z0-9]','',teks)
+            conn.execute("INSERT INTO data(text, text_clean) VALUES ('"+ teks +"','"+ file_clean +"')")
+    
+            print(file_clean)
 
-        file_clean = re.sub(r'[^a-zA-Z0-9]','',data)
-
-=======
-             
-        data = pd.read_csv(file)
-
-        file_clean = re.sub(r'[^a-zA-Z0-9]','',data)
-
->>>>>>> parent of f77c729 (Succes make Function)
-=======
-             
-        data = pd.read_csv(file)
-
-        file_clean = re.sub(r'[^a-zA-Z0-9]','',data)
-
->>>>>>> parent of f77c729 (Succes make Function)
-        conn.execute("INSERT INTO data(text, text_clean) VALUES ('"+ data +"','"+ file_clean +"')")
         conn.commit()
         conn.close()
 
         json_response = {
             'status_code' : 200,
-            'description' : "Teks yang sudah diproses",
-            'data' : text_clean,
+            'description' : "File yang sudah diproses",
+            'data' : data.iloc[:, 1],
         }
 
         response_data = jsonify(json_response)
         return response_data
     
+
 
 if __name__ == '__main__' :
     app.run()
