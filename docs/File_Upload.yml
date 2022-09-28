@@ -1,0 +1,22 @@
+
+#This API let's you train word embeddings
+#Call this api passing your file and get the word embeddings.
+
+tags:
+  - name : File Processing
+consumes:
+  - multipart/form-data  
+parameters:
+  - name: file
+    required: false
+    in: formData
+    type: file
+    required: true
+    description: Upload your CSV File.
+responses:
+  '200':
+    description: Succesfull response
+  '400':
+    description: Bad Request
+  '500':
+    description: Internal Server Error
