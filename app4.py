@@ -1,7 +1,11 @@
+from fileinput import filename
 import re
 import sqlite3
 import pandas as pd
 from flask import Flask, jsonify
+import os
+
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
@@ -99,13 +103,28 @@ def text_processing():
     return response_data
 
 
-# Upload CSV File
+## Upload CSV File
+
+#Defining Allowed Extensions
+allowed_extensions = set(['csv'])
+
+def allowed_file(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in allowed_extensions
+
+
+
 @swag_from("docs/file_Upload.yml", methods = ['POST'])
 @app.route("/upload_csv", methods=["POST"])
 def upload_csv():
    if request.method == 'POST':
         file = request.files['file']
-             
+
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            new_filename = f'{filename.split(".")[0]}.csv'
+            file.save(os.path.join('input', new_filename))
+
         data = pd.read_csv(file)
         first_column = data.iloc[:, 0]
 
