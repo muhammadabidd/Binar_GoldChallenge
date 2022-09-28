@@ -117,35 +117,34 @@ def allowed_file(filename):
 @swag_from("docs/file_Upload.yml", methods = ['POST'])
 @app.route("/upload_csv", methods=["POST"])
 def upload_csv():
-   if request.method == 'POST':
-        file = request.files['file']
+   
+    file = request.files['file']
 
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            new_filename = f'{filename.split(".")[0]}.csv'
-            file.save(os.path.join('input', new_filename))
-            filepath = 'Input/' + str(new_filename)
-            data = pd.read_csv("'" + filepath + "'")
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        new_filename = f'{filename.split(".")[0]}.csv'
+        file.save(os.path.join('input', new_filename))
+        filepath = 'Input/' + str(new_filename)
+        data = pd.read_csv(filepath)
         
-            first_column = data.iloc[:, 0]
+    first_column = data.iloc[:, 0]
 
-            for teks in first_column:
-                file_clean = re.sub(r'[^a-zA-Z0-9]','',teks)
-                conn.execute("INSERT INTO data(text, text_clean) VALUES ('"+ teks +"','"+ file_clean +"')")
+    for teks in first_column:
+        file_clean = re.sub(r'[^a-zA-Z0-9]','',teks)
+        conn.execute("INSERT INTO data(text, text_clean) VALUES ('"+ teks +"','"+ file_clean +"')")
         
-                print(file_clean)
 
-        conn.commit()
-        conn.close()
+    conn.commit()
+    conn.close()
 
-        json_response = {
-            'status_code' : 200,
-            'description' : "File yang sudah diproses",
-            'data' : data.iloc[:, 1],
-        }
+    json_response = {
+        'status_code' : 200,
+        'description' : "File yang sudah diproses",
+        'data' : data.iloc[:, 1],
+    }
 
-        response_data = jsonify(json_response)
-        return response_data
+    response_data = jsonify(json_response)
+    return response_data
     
 
 
