@@ -102,7 +102,7 @@ def text_processing():
 # Upload CSV File
 @swag_from("docs/file_Upload.yml", methods = ['POST'])
 @app.route("/upload_csv", methods=["POST"])
-def tweet_csv():
+def upload_csv():
    if request.method == 'POST':
         file = request.files['file']
              
