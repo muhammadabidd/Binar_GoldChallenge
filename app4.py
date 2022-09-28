@@ -109,6 +109,7 @@ def text_processing():
 def upload_csv():
    if request.method == 'POST':
         file = request.files['file']
+<<<<<<< HEAD
         filename = secure_filename(file.filename)
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(file_path)
@@ -119,6 +120,13 @@ def upload_csv():
 
         file_clean = re.sub(r'[^a-zA-Z0-9]','',data)
 
+=======
+             
+        data = pd.read_csv(file)
+
+        file_clean = re.sub(r'[^a-zA-Z0-9]','',data)
+
+>>>>>>> parent of f77c729 (Succes make Function)
         conn.execute("INSERT INTO data(text, text_clean) VALUES ('"+ data +"','"+ file_clean +"')")
         conn.commit()
         conn.close()
