@@ -8,7 +8,6 @@ consumes:
   - multipart/form-data  
 parameters:
   - name: file
-    required: false
     in: formData
     type: file
     required: true
