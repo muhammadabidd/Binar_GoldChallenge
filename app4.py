@@ -107,17 +107,21 @@ def tweet_csv():
         file = request.files['file']
              
         data = pd.read_csv(file)
+        first_column = data.iloc[:, 0]
 
-        file_clean = re.sub(r'[^a-zA-Z0-9]','',data)
+        for teks in first_column:
+            file_clean = re.sub(r'[^a-zA-Z0-9]','',teks)
+            conn.execute("INSERT INTO data(text, text_clean) VALUES ('"+ teks +"','"+ file_clean +"')")
+    
+            print(file_clean)
 
-        conn.execute("INSERT INTO data(text, text_clean) VALUES ('"+ data +"','"+ file_clean +"')")
         conn.commit()
         conn.close()
 
         json_response = {
             'status_code' : 200,
-            'description' : "Teks yang sudah diproses",
-            'data' : text_clean,
+            'description' : "File yang sudah diproses",
+            'data' : data.iloc[:, 1],
         }
 
         response_data = jsonify(json_response)
