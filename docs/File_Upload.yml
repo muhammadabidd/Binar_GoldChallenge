@@ -1,5 +1,6 @@
 
-
+#This API let's you train word embeddings
+#Call this api passing your file and get the word embeddings.
 
 tags:
   - name : File Processing
