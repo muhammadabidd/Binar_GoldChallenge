@@ -1,5 +1,6 @@
 import re
 import sqlite3
+import pandas as pd
 from flask import Flask, jsonify
 
 app = Flask(__name__)
@@ -96,6 +97,23 @@ def text_processing():
 
     response_data = jsonify(json_response)
     return response_data
+
+
+# Upload CSV File
+@swag_from("docs/text_processing.yml", methods = ['POST'])
+@app.route("/upload_csv", methods=["POST"])
+def tweet_csv():
+   if request.method == 'POST':
+        file = request.files['file']
+                
+        try:
+            data = pd.read_csv(file, encoding='iso-8859-1')
+        except:
+            data = pd.read_csv(file, encoding='utf-8') 
+
+     
+
+
 
 
 if __name__ == '__main__' :
