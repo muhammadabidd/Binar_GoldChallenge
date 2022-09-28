@@ -41,8 +41,6 @@ conn = sqlite3.connect('text_processing.db', check_same_thread=False)
 conn.execute('''CREATE TABLE IF NOT EXISTS data (text varchar(255), text_clean varchar(255));''')
 
 
-
-
 @swag_from("docs/hello_world.yml", methods = ['GET'])
 @app.route('/', methods=['GET'])
 def hello_world():
@@ -87,6 +85,8 @@ def text_processing():
     text_clean = re.sub(r'[^a-zA-Z0-9]','',text)
 
     conn.execute("INSERT INTO data(text, text_clean) VALUES ('"+ text +"','"+ text_clean +"')")
+    conn.commit()
+    conn.close()
 
     json_response = {
         'status_code' : 200,
