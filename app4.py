@@ -124,15 +124,16 @@ def upload_csv():
             filename = secure_filename(file.filename)
             new_filename = f'{filename.split(".")[0]}.csv'
             file.save(os.path.join('input', new_filename))
+            filepath = 'Input/' + str(new_filename)
+            data = pd.read_csv("'" + filepath + "'")
+        
+            first_column = data.iloc[:, 0]
 
-        data = pd.read_csv(file)
-        first_column = data.iloc[:, 0]
-
-        for teks in first_column:
-            file_clean = re.sub(r'[^a-zA-Z0-9]','',teks)
-            conn.execute("INSERT INTO data(text, text_clean) VALUES ('"+ teks +"','"+ file_clean +"')")
-    
-            print(file_clean)
+            for teks in first_column:
+                file_clean = re.sub(r'[^a-zA-Z0-9]','',teks)
+                conn.execute("INSERT INTO data(text, text_clean) VALUES ('"+ teks +"','"+ file_clean +"')")
+        
+                print(file_clean)
 
         conn.commit()
         conn.close()
