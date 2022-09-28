@@ -109,6 +109,7 @@ def text_processing():
 def upload_csv():
    if request.method == 'POST':
         file = request.files['file']
+<<<<<<< HEAD
 
         filename = secure_filename(file.filename)
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
@@ -116,20 +117,21 @@ def upload_csv():
 
         data = pd.read_csv(file_path)
         first_column = data.iloc[:, 0]
+=======
+             
+        data = pd.read_csv(file)
+>>>>>>> parent of f77c729 (Succes make Function)
 
-        for teks in first_column:
-            file_clean = re.sub(r'[^a-zA-Z0-9]','',teks)
-            conn.execute("INSERT INTO data(text, text_clean) VALUES ('"+ teks +"','"+ file_clean +"')")
-    
-            print(file_clean)
+        file_clean = re.sub(r'[^a-zA-Z0-9]','',data)
 
+        conn.execute("INSERT INTO data(text, text_clean) VALUES ('"+ data +"','"+ file_clean +"')")
         conn.commit()
         conn.close()
 
         json_response = {
             'status_code' : 200,
-            'description' : "File yang sudah diproses",
-            'data' : data.iloc[:, 1],
+            'description' : "Teks yang sudah diproses",
+            'data' : text_clean,
         }
 
         response_data = jsonify(json_response)
