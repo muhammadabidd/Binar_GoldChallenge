@@ -41,6 +41,7 @@ swagger = Swagger(app, template=swagger_template, config = swagger_config)
 
 #Connecting to database
 conn = sqlite3.connect('text_processing.db', check_same_thread=False)
+c = conn.cursor()
 
 #Defining and Executing the Query for table data if it not available
 conn.execute('''CREATE TABLE IF NOT EXISTS data (text varchar(255), text_clean varchar(255));''')
@@ -89,9 +90,10 @@ def text_processing():
     text = request.form.get('text')
     text_clean = re.sub(r'[^a-zA-Z0-9]','',text)
 
-    conn.execute("INSERT INTO data(text, text_clean) VALUES ('"+ text +"','"+ text_clean +"')")
-    conn.commit()
-    conn.close()
+    with conn:
+        c.execute("INSERT INTO data(text, text_clean) VALUES ('"+ text +"','"+ text_clean +"')")
+        conn.commit()
+    
 
     json_response = {
         'status_code' : 200,
@@ -131,11 +133,11 @@ def upload_csv():
 
     for teks in first_column:
         file_clean = re.sub(r'[^a-zA-Z0-9]','',teks)
-        conn.execute("INSERT INTO data(text, text_clean) VALUES ('"+ teks +"','"+ file_clean +"')")
-        
-
-    conn.commit()
-    conn.close()
+                
+        with conn:
+            c.execute("INSERT INTO data(text, text_clean) VALUES ('"+ teks +"','"+ file_clean +"')")
+            conn.commit()
+   
 
     json_response = {
         'status_code' : 200,
