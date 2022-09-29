@@ -125,7 +125,7 @@ def upload_csv():
         new_filename = f'{filename.split(".")[0]}.csv'
         file.save(os.path.join('input', new_filename))
         filepath = 'Input/' + str(new_filename)
-        data = pd.read_csv(filepath)
+        data = pd.read_csv(filepath, encoding='latin-1')
         
     first_column = data.iloc[:, 0]
 
@@ -140,7 +140,7 @@ def upload_csv():
     json_response = {
         'status_code' : 200,
         'description' : "File yang sudah diproses",
-        'data' : data.iloc[:, 1],
+        'data' : 'data has been uploaded',
     }
 
     response_data = jsonify(json_response)
