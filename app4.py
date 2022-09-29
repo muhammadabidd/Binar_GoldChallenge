@@ -2,7 +2,7 @@ from fileinput import filename
 import re
 import sqlite3
 import pandas as pd
-from flask import Flask, jsonify
+from flask import Flask, jsonify, send_from_directory
 import os
 from datetime import datetime
 from werkzeug.utils import secure_filename
@@ -122,33 +122,39 @@ def upload_csv():
     file = request.files['file']
 
     if file and allowed_file(file.filename):
+
         filename = secure_filename(file.filename)
         new_filename = f'{filename.split(".")[0]}.csv'
-        file.save(os.path.join('input', new_filename))
+        
+        
+        save_location = os.path.join('input', new_filename)
+        file.save(save_location)
+
+
         filepath = 'Input/' + str(new_filename)
         data = pd.read_csv(filepath, encoding='latin-1')
+        first_column = data.iloc[:, 0]
+        for teks in first_column:
+            file_clean = re.sub(r'[^a-zA-Z0-9]',' ',teks)
 
 
-
-    first_column = data.iloc[:, 0]
-
-    for teks in first_column:
-        file_clean = re.sub(r'[^a-zA-Z0-9]',' ',teks)
-                
         with conn:
             c.execute('''INSERT INTO data(text, text_clean) VALUES (? , ?);''',(str(teks), str(file_clean)))
             conn.commit()
-   
 
+
+        file.save(save_location)
+        
     json_response = {
         'status_code' : 200,
         'description' : "File yang sudah diproses",
-        'data' : 'data has been uploaded',
+        'data' : "open this link to download : http://127.0.0.1:5000/download",
     }
 
     response_data = jsonify(json_response)
     return response_data
     
+
 
 
 if __name__ == '__main__' :
