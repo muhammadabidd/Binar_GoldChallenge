@@ -124,7 +124,7 @@ def upload_csv():
 
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        new_filename = f'{filename.split(".")[0]}_{str(datetime.now())}.csv'
+        new_filename = f'{filename.split(".")[0]}.csv'
         file.save(os.path.join('input', new_filename))
         filepath = 'Input/' + str(new_filename)
         data = pd.read_csv(filepath, encoding='latin-1')
