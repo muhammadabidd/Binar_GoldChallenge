@@ -2,7 +2,7 @@ from fileinput import filename
 import re
 import sqlite3
 import pandas as pd
-from flask import Flask, jsonify, send_from_directory
+from flask import Flask, jsonify, render_template, send_from_directory
 import os
 from datetime import datetime
 from werkzeug.utils import secure_filename
@@ -144,7 +144,9 @@ def upload_csv():
 
 
         file.save(save_location)
-        
+
+    
+
     json_response = {
         'status_code' : 200,
         'description' : "File yang sudah diproses",
@@ -153,8 +155,15 @@ def upload_csv():
 
     response_data = jsonify(json_response)
     return response_data
-    
 
+
+@app.route('/download')
+def download():
+    return render_template('download.html', files=os.listdir('input'))
+
+@app.route('/download/<filename>')
+def download_file(filename):
+    return send_from_directory('input', filename)
 
 
 if __name__ == '__main__' :
