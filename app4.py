@@ -5,7 +5,6 @@ import pandas as pd
 from flask import Flask, jsonify
 import os
 from datetime import datetime
-
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
