@@ -119,7 +119,6 @@ def allowed_file(filename):
 @swag_from("docs/file_Upload.yml", methods = ['POST'])
 @app.route("/upload_csv", methods=["POST"])
 def upload_csv():
-   
     file = request.files['file']
 
     if file and allowed_file(file.filename):
@@ -128,7 +127,10 @@ def upload_csv():
         file.save(os.path.join('input', new_filename))
         filepath = 'Input/' + str(new_filename)
         data = pd.read_csv(filepath, encoding='latin-1')
-        
+    else:
+        print('sorry your file is in invalid format')
+
+
     first_column = data.iloc[:, 0]
 
     for teks in first_column:
@@ -151,5 +153,5 @@ def upload_csv():
 
 
 if __name__ == '__main__' :
-    app.run()
+    app.run(debug=True)
 
