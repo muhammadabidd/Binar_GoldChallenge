@@ -88,10 +88,10 @@ def text_clean():
 @app.route('/text_processing', methods=['POST'])
 def text_processing():
     text = request.form.get('text')
-    text_clean = re.sub(r'[^a-zA-Z0-9]','',text)
+    text_clean = re.sub(r'[^a-zA-Z0-9]',' ',text)
 
     with conn:
-        c.execute("INSERT INTO data(text, text_clean) VALUES ('"+ text +"','"+ text_clean +"')")
+        c.execute('''INSERT INTO data(text, text_clean) VALUES (? , ?);''',(str(text), str(text_clean)))
         conn.commit()
     
 
@@ -134,10 +134,10 @@ def upload_csv():
     first_column = data.iloc[:, 0]
 
     for teks in first_column:
-        file_clean = re.sub(r'[^a-zA-Z0-9]','',teks)
+        file_clean = re.sub(r'[^a-zA-Z0-9]',' ',teks)
                 
         with conn:
-            c.execute("INSERT INTO data(text, text_clean) VALUES ('"+ teks +"','"+ file_clean +"')")
+            c.execute('''INSERT INTO data(text, text_clean) VALUES (? , ?);''',(str(teks), str(file_clean)))
             conn.commit()
    
 
