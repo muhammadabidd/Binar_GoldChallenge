@@ -127,8 +127,7 @@ def upload_csv():
         file.save(os.path.join('input', new_filename))
         filepath = 'Input/' + str(new_filename)
         data = pd.read_csv(filepath, encoding='latin-1')
-    else:
-        print('sorry your file is in invalid format')
+
 
 
     first_column = data.iloc[:, 0]
