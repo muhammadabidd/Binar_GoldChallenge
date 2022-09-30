@@ -135,15 +135,17 @@ def upload_csv():
         data = pd.read_csv(filepath, encoding='latin-1')
         first_column = data.iloc[:, 0]
         for teks in first_column:
-            file_clean = re.sub(r'[^a-zA-Z0-9]',' ',teks)
+            file_clean = re.sub(r'[^a-zA-Z0-9]','',teks)
+
+            with conn:
+                c.execute('''INSERT INTO data(text, text_clean) VALUES (? , ?);''',(str(teks), str(file_clean)))
+                conn.commit()
 
 
-        with conn:
-            c.execute('''INSERT INTO data(text, text_clean) VALUES (? , ?);''',(str(teks), str(file_clean)))
-            conn.commit()
+        
 
 
-        file.save(save_location)
+        # file.save(save_location)
 
     
 
