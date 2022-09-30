@@ -1,7 +1,11 @@
+from fileinput import filename
 import re
 import sqlite3
 import pandas as pd
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template, send_from_directory
+import os
+from datetime import datetime
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
@@ -37,6 +41,7 @@ swagger = Swagger(app, template=swagger_template, config = swagger_config)
 
 #Connecting to database
 conn = sqlite3.connect('text_processing.db', check_same_thread=False)
+c = conn.cursor()
 
 #Defining and Executing the Query for table data if it not available
 conn.execute('''CREATE TABLE IF NOT EXISTS data (text varchar(255), text_clean varchar(255));''')
@@ -83,11 +88,12 @@ def text_clean():
 @app.route('/text_processing', methods=['POST'])
 def text_processing():
     text = request.form.get('text')
-    text_clean = re.sub(r'[^a-zA-Z0-9]','',text)
+    text_clean = re.sub(r'[^a-zA-Z0-9]',' ',text)
 
-    conn.execute("INSERT INTO data(text, text_clean) VALUES ('"+ text +"','"+ text_clean +"')")
-    conn.commit()
-    conn.close()
+    with conn:
+        c.execute('''INSERT INTO data(text, text_clean) VALUES (? , ?);''',(str(text), str(text_clean)))
+        conn.commit()
+    
 
     json_response = {
         'status_code' : 200,
@@ -99,23 +105,72 @@ def text_processing():
     return response_data
 
 
-# Upload CSV File
+## Upload CSV File
+
+#Defining Allowed Extensions
+allowed_extensions = set(['csv'])
+
+def allowed_file(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in allowed_extensions
+
+
+
 @swag_from("docs/file_Upload.yml", methods = ['POST'])
 @app.route("/upload_csv", methods=["POST"])
-def tweet_csv():
-   if request.method == 'POST':
-        file = request.files['file']
-                
-        try:
-            data = pd.read_csv(file, encoding='iso-8859-1')
-        except:
-            data = pd.read_csv(file, encoding='utf-8') 
+def upload_csv():
+    file = request.files['file']
 
-     
+    if file and allowed_file(file.filename):
+
+        filename = secure_filename(file.filename)
+        new_filename = f'{filename.split(".")[0]}.csv'
+        
+        
+        save_location = os.path.join('input', new_filename)
+        file.save(save_location)
 
 
+        filepath = 'Input/' + str(new_filename)
+        data = pd.read_csv(filepath, encoding='latin-1')
+        first_column_pre_process = data.iloc[:, 0]
+
+        newlist = []
+
+        for teks in first_column_pre_process:
+            file_clean = re.sub(r'[^a-zA-Z0-9]','',teks)
+
+            with conn:
+                c.execute('''INSERT INTO data(text, text_clean) VALUES (? , ?);''',(str(teks), str(file_clean)))
+                conn.commit()
+
+            newlist.append(file_clean)
+        
+        new_data_frame = pd.DataFrame(newlist, columns= ['Cleaned Teks'])
+
+        outputfilepath = f'output/{new_filename}'
+        new_data_frame.to_csv(outputfilepath)
+
+
+    json_response = {
+        'status_code' : 200,
+        'description' : "File yang sudah diproses",
+        'data' : "open this link to download : http://127.0.0.1:5000/download",
+    }
+
+    response_data = jsonify(json_response)
+    return response_data
+
+
+@app.route('/download')
+def download():
+    return render_template('download.html', files=os.listdir('output'))
+
+@app.route('/download/<filename>')
+def download_file(filename):
+    return send_from_directory('output', filename)
 
 
 if __name__ == '__main__' :
-    app.run()
+    app.run(debug=True)
 
