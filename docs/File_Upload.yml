@@ -1,14 +1,10 @@
 
-#This API let's you train word embeddings
-#Call this api passing your file and get the word embeddings.
-
 tags:
   - name : File Processing
 consumes:
   - multipart/form-data  
 parameters:
   - name: file
-    required: false
     in: formData
     type: file
     required: true

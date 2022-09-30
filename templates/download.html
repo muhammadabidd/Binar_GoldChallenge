@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            .bn632-hover {
+                width: fit-content;
+                padding: 0px 20px;
+                max-width: 100%;
+                font-size: 16px;
+                font-weight: 600;
+                color: #fff;
+                cursor: pointer;
+                margin: 20px;
+                height: 55px;
+                text-align:center;
+                border: none;
+                background-size: 300% 100%;
+                border-radius: 50px;
+                -o-transition: all .4s ease-in-out;
+                -webkit-transition: all .4s ease-in-out;
+                transition: all .4s ease-in-out;
+              }
+            
+              .bn632-hover:hover {
+                background-position: 100% 0;
+                -o-transition: all .4s ease-in-out;
+                -webkit-transition: all .4s ease-in-out;
+                transition: all .4s ease-in-out;
+              }
+            
+              .bn632-hover:focus {
+                outline: none;
+              }
+            
+              .bn632-hover.bn26 {
+                background-image: linear-gradient(
+                to right,
+                #25aae1,
+                #4481eb,
+                #04befe,
+                #3f86ed
+                );
+                box-shadow: 0 4px 15px 0 rgba(65, 132, 234, 0.75);
+              }
+        </style>
+    </head>
+
+<body>
+
+    <div>
+        {% for filename in files%} 
+        <a href="{{ url_for('download_file', filename=filename)}}"><button class="bn632-hover bn26">{{filename}}</button></a><br/>
+        {% endfor %}
+    </div>
+
+</body>
+</html>
+
+
+
