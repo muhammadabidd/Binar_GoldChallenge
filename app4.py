@@ -134,6 +134,9 @@ def upload_csv():
         filepath = 'Input/' + str(new_filename)
         data = pd.read_csv(filepath, encoding='latin-1')
         first_column_pre_process = data.iloc[:, 0]
+
+        newlist = []
+
         for teks in first_column_pre_process:
             file_clean = re.sub(r'[^a-zA-Z0-9]','',teks)
 
@@ -141,13 +144,13 @@ def upload_csv():
                 c.execute('''INSERT INTO data(text, text_clean) VALUES (? , ?);''',(str(teks), str(file_clean)))
                 conn.commit()
 
-
+            newlist.append(file_clean)
         
+        new_data_frame = pd.DataFrame(newlist, columns= ['Cleaned Teks'])
 
+        outputfilepath = f'output/{new_filename}'
+        new_data_frame.to_csv(outputfilepath)
 
-        
-
-    
 
     json_response = {
         'status_code' : 200,
@@ -161,11 +164,11 @@ def upload_csv():
 
 @app.route('/download')
 def download():
-    return render_template('download.html', files=os.listdir('input'))
+    return render_template('download.html', files=os.listdir('output'))
 
 @app.route('/download/<filename>')
 def download_file(filename):
-    return send_from_directory('input', filename)
+    return send_from_directory('output', filename)
 
 
 if __name__ == '__main__' :
