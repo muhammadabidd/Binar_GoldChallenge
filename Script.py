@@ -1,9 +1,6 @@
 import re
 import pandas as pd
 
-
-
-
 def lowercase(text):
     new_text = text.lower()
     return new_text
