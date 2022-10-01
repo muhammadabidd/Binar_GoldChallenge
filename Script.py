@@ -1,8 +1,6 @@
 import re
 import pandas as pd
-from werkzeug.utils import secure_filename
-import os
-from flask import request
+
 
 
 
@@ -33,6 +31,8 @@ def remove_nonaplhanumeric(text):
 def remove_duplicateexclamation(text):
     text = re.sub(r'[!]{2,}', '!', text)
     text = re.sub(r'[?]{2,}', '?', text)
+    text = re.sub(r'(! ){2,}', '?', text)
+    text = re.sub(r'(? ){2,}', '?', text)
     return text
 
 
@@ -46,9 +46,9 @@ def normalize_alay(text):
 
 
 def process_word(text):
-    for text in first_column_pre_process:
-        text = lowercase(text)
-        text = remove_unnecessary_char(text)
-        text = remove_nonaplhanumeric(text)
-        text = remove_duplicateexclamation(text)
-        text = normalize_alay(text)
+    text = lowercase(text)
+    text = remove_unnecessary_char(text)
+    text = remove_nonaplhanumeric(text)
+    text = remove_duplicateexclamation(text)
+    text = normalize_alay(text)
+    return text
