@@ -4,11 +4,6 @@ import sqlite3
 import pandas as pd
 from flask import Flask, jsonify, render_template, send_from_directory
 import os
-<<<<<<< HEAD:App.py
-
-
-=======
->>>>>>> parent of 03d56b8 (Tidy App Folder):app4.py
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from Script import process_word
@@ -94,7 +89,7 @@ def text_clean():
 @app.route('/text_processing', methods=['POST'])
 def text_processing():
     text = request.form.get('text')
-    text_clean = re.sub(r'[^a-zA-Z0-9]',' ',text)
+    text_clean = process_word(text)
 
     with conn:
         c.execute('''INSERT INTO data(text, text_clean) VALUES (? , ?);''',(str(text), str(text_clean)))
@@ -112,6 +107,7 @@ def text_processing():
 
 
 ## Upload CSV File
+
 #Defining Allowed Extensions
 allowed_extensions = set(['csv'])
 
@@ -135,28 +131,21 @@ def upload_csv():
         save_location = os.path.join('input', new_filename)
         file.save(save_location)
 
-<<<<<<< HEAD:App.py
-
         filepath = 'Input/' + str(new_filename)
-
-=======
-        filepath = 'Input/' + str(new_filename)
->>>>>>> parent of 03d56b8 (Tidy App Folder):app4.py
         data = pd.read_csv(filepath, encoding='latin-1')
         first_column_pre_process = data.iloc[:, 0]
 
-        newlist = []
-
-        for teks in first_column_pre_process:
-            file_clean = re.sub(r'[^a-zA-Z0-9]','',teks)
+        cleaned_word = []
+        for text in first_column_pre_process:
+            file_clean = process_word(text)
 
             with conn:
-                c.execute('''INSERT INTO data(text, text_clean) VALUES (? , ?);''',(str(teks), str(file_clean)))
+                c.execute('''INSERT INTO data(text, text_clean) VALUES (? , ?);''',(str(text), str(file_clean)))
                 conn.commit()
 
-            newlist.append(file_clean)
+            cleaned_word.append(file_clean)
         
-        new_data_frame = pd.DataFrame(newlist, columns= ['Cleaned Teks'])
+        new_data_frame = pd.DataFrame(cleaned_word, columns= ['Cleaned Text'])
 
         outputfilepath = f'output/{new_filename}'
         new_data_frame.to_csv(outputfilepath)

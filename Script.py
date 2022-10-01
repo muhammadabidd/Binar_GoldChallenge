@@ -1,5 +1,4 @@
 import re
-<<<<<<< HEAD
 import pandas as pd
 
 
@@ -53,5 +52,3 @@ def process_word(text):
     text = remove_duplicateexclamation(text)
     text = normalize_alay(text)
     return text
-=======
->>>>>>> parent of bf7a170 (Merge pull request #3 from muhammadabidd/Making-Regex-Function)
