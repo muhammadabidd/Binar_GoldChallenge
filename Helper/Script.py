@@ -33,9 +33,10 @@ def remove_duplicateexclamation(text):
     return text
 
 
-kamus_alay = pd.read_csv('source/kamusalay.csv')
-alay_dict_map = dict(zip(kamus_alay['alay'], kamus_alay['arti'])) 
+ 
 def normalize_alay(text):
+    kamus_alay = pd.read_csv('source/kamusalay.csv')
+    alay_dict_map = dict(zip(kamus_alay['alay'], kamus_alay['arti']))
     for word in alay_dict_map:
         normalized_word = ' '.join([alay_dict_map[word] if word in alay_dict_map else word for word in text.split(' ')])
         return normalized_word
@@ -49,3 +50,8 @@ def process_word(text):
     text = remove_duplicateexclamation(text)
     text = normalize_alay(text)
     return text
+
+
+apaapa = normalize_alay('adl')
+
+print(apaapa)
