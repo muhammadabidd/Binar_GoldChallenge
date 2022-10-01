@@ -33,7 +33,7 @@ def remove_duplicateexclamation(text):
     return text
 
 
-kamus_alay = pd.read_csv('Helper/kamusalay.csv')
+kamus_alay = pd.read_csv('source/kamusalay.csv')
 alay_dict_map = dict(zip(kamus_alay['alay'], kamus_alay['arti'])) 
 def normalize_alay(text):
     for word in alay_dict_map:
