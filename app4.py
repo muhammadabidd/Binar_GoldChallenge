@@ -89,7 +89,7 @@ def text_clean():
 @app.route('/text_processing', methods=['POST'])
 def text_processing():
     text = request.form.get('text')
-    text_clean = process_word(text)
+    text_clean = re.sub(r'[^a-zA-Z0-9]',' ',text)
 
     with conn:
         c.execute('''INSERT INTO data(text, text_clean) VALUES (? , ?);''',(str(text), str(text_clean)))
@@ -107,7 +107,6 @@ def text_processing():
 
 
 ## Upload CSV File
-
 #Defining Allowed Extensions
 allowed_extensions = set(['csv'])
 
