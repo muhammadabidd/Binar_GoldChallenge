@@ -87,7 +87,7 @@ def text_clean():
     json_response = {
         'status_code' : 200,
         'description' : "Original Teks",
-        'data' : re.sub(r'[^a-zA-Z0-9]', ' ', "Halo, apa kabar semua?)(*)(*()*&"),
+        'data' : process_word("Hallo,,,, nama*&@ saya adl Abid,,,, trims"),
     }
     
     response_data = jsonify(json_response)
@@ -98,7 +98,7 @@ def text_clean():
 @app.route('/text_processing', methods=['POST'])
 def text_processing():
     text = request.form.get('text')
-    text_clean = re.sub(r'[^a-zA-Z0-9]', ' ', text)
+    text_clean = process_word(text)
 
     with conn:
         c.execute('''INSERT INTO data(text, text_clean) VALUES (? , ?);''',(str(text), str(text_clean)))
@@ -139,7 +139,7 @@ def upload_csv():
         file.save(save_location)
 
 
-        filepath = 'Input/' + str(new_filename)
+        filepath = 'input/' + str(new_filename)
 
         data = pd.read_csv(filepath, encoding='latin-1')
         first_column_pre_process = data.iloc[:, 0]
@@ -147,7 +147,7 @@ def upload_csv():
         cleaned_word = []
 
         for text in first_column_pre_process:
-            file_clean = re.sub(r'[^a-zA-Z0-9]', ' ',text)
+            file_clean = process_word(text)
 
             with conn:
                 c.execute('''INSERT INTO data(text, text_clean) VALUES (? , ?);''',(str(text), str(file_clean)))

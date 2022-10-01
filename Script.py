@@ -19,7 +19,8 @@ def remove_unnecessary_char(text):
 
 
 def remove_nonaplhanumeric(text):
-    text = re.sub(r'[^0-9a-zA-Z\?!]+', ' ', text)
+    text = re.sub(r'[^0-9a-zA-Z\?!,.]+', ' ', text)
+    text = re.sub('"','', text)
     text = re.sub("\s\s+" , " ", text)
     text = re.sub('^\s','', text)
     return text
@@ -28,8 +29,10 @@ def remove_nonaplhanumeric(text):
 def remove_duplicateexclamation(text):
     text = re.sub(r'[!]{2,}', '!', text)
     text = re.sub(r'[\?]{2,}', '?', text)
-    text = re.sub(r'(\! ){2,}', '?', text)
+    text = re.sub(r'(! ){2,}', '!', text)
     text = re.sub(r'(\? ){2,}', '?', text)
+    text = re.sub(r',{2,}', ',', text)
+    text = re.sub(r'\.{2,}', ',', text)
     return text
 
 
