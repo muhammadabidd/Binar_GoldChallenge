@@ -52,7 +52,7 @@ conn.execute('''CREATE TABLE IF NOT EXISTS data (text varchar(255), text_clean v
 #Homepage
 @app.route('/', methods=['GET'])
 def get():
-    return "Welcome to Tworst!"
+    return render_template('index.html', files=os.listdir('output'))
 
 #1 Basic API "Hello World"
 @swag_from("docs/hello_world.yml", methods = ['GET'])
