@@ -101,7 +101,7 @@ def text_processing():
     text_clean = process_word(text)
 
     with conn:
-        c.execute('''INSERT INTO data(text, text_clean) VALUES (? , ?);''',(str(text), str(text_clean)))
+        c.execute('''INSERT INTO data(text, text_clean) VALUES (? , ?);''', (text, text_clean))
         conn.commit()
     
 
@@ -150,7 +150,7 @@ def upload_csv():
             file_clean = process_word(text)
 
             with conn:
-                c.execute('''INSERT INTO data(text, text_clean) VALUES (? , ?);''',(str(text), str(file_clean)))
+                c.execute('''INSERT INTO data(text, text_clean) VALUES (? , ?);''',(text, file_clean))
                 conn.commit()
 
             cleaned_word.append(file_clean)
@@ -159,6 +159,7 @@ def upload_csv():
 
         outputfilepath = f'output/{new_filename}'
         new_data_frame.to_csv(outputfilepath)
+        print(new_data_frame)
 
 
     json_response = {
