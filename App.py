@@ -155,12 +155,10 @@ def upload_csv():
 
             cleaned_word.append(file_clean)
         
-        new_data_frame = pd.DataFrame(cleaned_word, columns= ['Cleaned Text'])
 
+        new_data_frame = pd.DataFrame(cleaned_word, columns= ['Cleaned Text'])
         outputfilepath = f'output/{new_filename}'
         new_data_frame.to_csv(outputfilepath)
-        print(new_data_frame)
-
 
     json_response = {
         'status_code' : 200,
