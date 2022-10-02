@@ -10,18 +10,19 @@ def remove_unnecessary_char(text):
     text = re.sub(r'\\n',' ', text)
     text = re.sub('rt','', text)
     text = re.sub('user','', text)
+    text = re.sub('url','', text)
     text = re.sub(';','', text)
     text = re.sub('((www\.[^\s]+)|(https?://[^\s]+)|(http?://[^\s]+))',' ',text)
     text = re.sub('  +',' ', text)
     text = re.sub('\d+\.\s',' ', text)
-    text = re.sub(r"x[a-z0-9][a-z0-9]",'',text)
+    text = re.sub(r'x[a-z0-9][a-z0-9]','',text)
     return text
 
 
 def remove_nonaplhanumeric(text):
     text = re.sub(r'[^0-9a-zA-Z\?!,.]+', ' ', text)
     text = re.sub('"','', text)
-    text = re.sub("\s\s+" , " ", text)
+    text = re.sub('\s\s+' , ' ', text)
     text = re.sub('^\s','', text)
     return text
 
@@ -56,4 +57,11 @@ def process_word(text):
 
 
 
+
+text = 'USER USER USER USER BANCI KALENG" MAL"U GA BISA JAWAB PERTANYAAN KAMI DARI 2 HARI LALU.... NYUNGSEP KOE USER URL'
+
+
+
+
+print(process_word(text))
 
