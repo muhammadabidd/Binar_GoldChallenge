@@ -58,29 +58,3 @@ def process_word(text):
 
 
 
-# text = 'USER USER USER USER BANCI KALENG" MAL"U GA BISA JAWAB PERTANYAAN KAMI DARI 2 HARI LALU.... NYUNGSEP KOE USER URL'
-# print(process_word(text))
-
-# list_text = ['"saya adl abid"', 'u suka *((*(*makan', 'kata mamah : "kamuh hebat"']
-# clean_list =[]
-# for text in list_text:
-#     # print(text)
-#     text = process_word(text)
-#     # print(text)
-#     clean_list.append(text)
-# print(clean_list)
-
-# df = pd.DataFrame(list_text)
-# df
-
-
-# first_column = df.iloc[:,0]
-
-# cleaned_list = []
-# for text in first_column:
-#     print(text)
-#     text = process_word(text)
-#     print(text)
-#     cleaned_list.append(text)
-
-# print(cleaned_list)

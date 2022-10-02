@@ -1,8 +1,9 @@
 #Importing Libraries
-import re
-import sqlite3
+
 import pandas as pd
+import sqlite3
 import os
+import re
 
 
 from datetime import datetime
@@ -132,7 +133,9 @@ def upload_csv():
     if file and allowed_file(file.filename):
 
         filename = secure_filename(file.filename)
-        new_filename = f'{filename.split(".")[0]}.csv'
+        time_stamp = (datetime.now().strftime('%d-%m-%Y_%H%M%S'))
+
+        new_filename = f'{filename.split(".")[0]}_{time_stamp}.csv'
         
         
         save_location = os.path.join('input', new_filename)
