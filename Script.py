@@ -57,4 +57,4 @@ def process_word(text):
 
 
 
-
+list = ['a']
