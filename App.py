@@ -13,14 +13,14 @@ from fileinput import filename
 from Script import process_word
 from werkzeug.utils import secure_filename
 
-#Difining app
+#Defining app
 app = Flask(__name__)
 
 
 app.json_encoder= LazyJSONEncoder
 swagger_template = dict(
 info = {
-    'title': LazyString(lambda : 'TWORST : API Documentation for Data Processing and Modeling'),
+    'title': LazyString(lambda : 'API Documentation for Data Processing and Modeling'),
     'version': LazyString(lambda : '1.0.0'),
     'description' : LazyString(lambda : 'Dokumentasi API untuk Data Processing dan Modeling'), 
     },
